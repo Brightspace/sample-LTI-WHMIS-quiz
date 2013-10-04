@@ -18,6 +18,23 @@ $sourcedid             = $_SESSION['lis_result_sourcedid'];
 $oauth_consumer_key    = $_SESSION['oauth_consumer_key'];
 $oauth_consumer_secret = $_SESSION['oauth_consumer_secret'];
 
+/*
+ *   READ BACK OUR GRADE
+ *   If it exists we don't want to resubmit!
+ */
+$postBody = str_replace(
+    array('SOURCEDID', 'OPERATION', 'MESSAGE'),
+    array($sourcedid, 'readResultRequest', uniqid()),
+    getPOXRequest());
+$response = parseResponse(sendOAuthBodyPOST('POST', $endpoint, $oauth_consumer_key, $oauth_consumer_secret, 'application/xml', $postBody));
+if($response['imsx_codeMajor'] == 'success' && $response['textString'] != '') {
+    exit('Grade was already set in LMS - a cheater?!');
+}
+
+/*
+ *   SET GRADE
+ *   Calculate the grade and send it to the LMS via the LTI outcome url
+ */
 if (isset($_REQUEST['question1']) && isset($_REQUEST['question2'])) {
     // Calculate the students grade based on their answers
     $grade = ($_REQUEST['question1'] == 'B' ? 1 : 0) + ($_REQUEST['question2'] == 'A' ? 1 : 0);

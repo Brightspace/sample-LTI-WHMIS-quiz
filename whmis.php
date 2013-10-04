@@ -68,14 +68,11 @@ if(!isset($_REQUEST['lis_outcome_service_url'])
     $endpoint  = $_REQUEST['lis_outcome_service_url'];
     $sourcedid = $_REQUEST['lis_result_sourcedid'];
 
-    $method = 'POST';
-    $content_type = 'application/xml';
-    $operation = 'readResultRequest';
     $postBody = str_replace(
         array('SOURCEDID', 'OPERATION', 'MESSAGE'),
-        array($sourcedid, $operation, uniqid()),
+        array($sourcedid, 'readResultRequest', uniqid()),
         getPOXRequest());
-    $response = parseResponse(sendOAuthBodyPOST($method, $endpoint, $oauth_consumer_key, $oauth_consumer_secret, $content_type, $postBody));
+    $response = parseResponse(sendOAuthBodyPOST('POST', $endpoint, $oauth_consumer_key, $oauth_consumer_secret, 'application/xml', $postBody));
     if($response['imsx_codeMajor'] == 'success' && $response['textString'] != '') {
         $grade = $response['textString'];
         $showGrade = true;
