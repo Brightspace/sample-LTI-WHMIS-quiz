@@ -22,7 +22,8 @@ Vagrant::configure("2") do |config|
 
 	config.vm.provision "docker" do |d|
 		d.run "php:5.6-apache",
-			args: "--name lti-quiz-sample --net=host -v /vagrant:/var/www/html"
+			args: "--name lti-quiz-sample --net=host -v /vagrant:/var/www/html -e OAUTH_KEY=key -e OAUTH_SECRET=secret \
+				-e SITE_URL=http://localhost:55555"
 	end
 
 	# autostart is broken
