@@ -3,15 +3,16 @@
 error_reporting(E_ALL & ~E_NOTICE);
 ini_set('display_errors', 1);
 
+require_once 'util/helpers.php';
 require_once 'util/lti_util.php';
 require_once 'OAuth1p0.php';
 
 /*
  *   CONFIGURATION
  */
-$OAUTH_KEY    = 'key';
-$OAUTH_SECRET = 'secret'; // You should use a better secret! This is shared with the LMS
-$SITE_URL     = 'http://example.com';
+$OAUTH_KEY    = get_or_default($_ENV['OAUTH_KEY'], 'key');
+$OAUTH_SECRET = get_or_default($_ENV['OAUTH_SECRET'], 'secret'); // You should use a better secret! This is shared with the LMS
+$SITE_URL     = get_or_default($_ENV['SITE_URL'], 'http://example.com');
 
 if(!isset($_REQUEST['lis_outcome_service_url'])
 || !isset($_REQUEST['lis_result_sourcedid'])
